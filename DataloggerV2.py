@@ -22,6 +22,7 @@ FSH=[]
 RSH=[]
 RWS=[]
 CP=[]
+Log=[]
 
 # trigger program,
 while GPIO.input(27)==1:
@@ -86,21 +87,16 @@ while GPIO.input(27)==1:
         cp=randint(0,100)
         
         # Appending  
-        Boost.append(boost)
-        Oil.append(oil)
-        FuelP.append(fuelp)
-        FSH.append(fsh)
-        RSH.append(rsh)
-        RWS.append(rws)
-        CP.append(cp)
+        Log.append([boost,oil,fuelp,fsh,rsh,rws,cp])
         
         #Create Rows
-        header=["Boost"]
-        row= Boost
+        header=["Time","Boost (PSI)","Oil Pressure (PSI)","Fuel Pressure","Front SH","Rear SH","Rear WS","Coolant Pressure"]
         #Create CSV
-        with open("Datalog.csv", 'w+',newline='') as f:
+        time=datetime.now().strftime("%y%m%d_%H.%M")
+        csvname='log'+time+'.csv'
+        with open(csvname, 'a+',newline='') as f:
             csv_writer = csv.writer(f)
             csv_writer.writerow(header)
-            csv_writer.writerow(row)
-            print(Boost)
+            for e in Log:
+                csv_writer.writerow(e)
             time.sleep(.001)
